@@ -49,5 +49,6 @@ export const CreatePost = () => (
 				</div>
 			</div>
 		</div>
+		<div role="alert" className="text-red-700"><span>* Please enter a post title.</span></div>
 	</form>
 );
