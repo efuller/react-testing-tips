@@ -22,6 +22,9 @@ export const CreatePost = () => {
 
 		setLoading(false);
 
+		setTitle('');
+		setContent('');
+
 		console.log({ result });
 	}
 
@@ -86,7 +89,7 @@ export const CreatePost = () => {
 					<div className="flex-shrink-0">
 						<button
 							type="submit"
-							className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+							className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md disabled:bg-gray-500 shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 							disabled={loading}
 						>
 							Create
