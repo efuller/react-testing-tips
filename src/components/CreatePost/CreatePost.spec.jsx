@@ -1,6 +1,9 @@
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CreatePost } from './index';
+import { savePost as mockSavePost } from '../../services';
+
+jest.mock('../../services');
 
 describe('<CreatePost />', () => {
 	it('should display an error if the form is submitted with no title', async () => {
@@ -46,6 +49,23 @@ describe('<CreatePost />', () => {
 		});
 	});
 
-	it.todo('should call createPost with the correct correct data');
+	it('should call createPost with the correct correct data', async () => {
+		const title = 'This is a blog post title';
+		const content = 'This is some very interesting post content.';
+
+		render(<CreatePost />);
+
+		const contentInput = await screen.getByLabelText(/content/i);
+		await userEvent.type(contentInput, content);
+
+		const titleInput = await screen.getByLabelText(/title/i);
+		await userEvent.type(titleInput, title);
+
+		const button = screen.getByRole('button');
+		fireEvent.submit(button);
+
+		expect(mockSavePost).toHaveBeenCalledWith({ title, content });
+	});
+
 	it.todo('should disable create button while submitting new post');
 })

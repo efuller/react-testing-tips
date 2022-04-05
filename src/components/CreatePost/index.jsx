@@ -1,18 +1,23 @@
 import React from 'react';
 import { CharCounter } from '../CharCounter';
+import { savePost } from '../../services';
 
 export const CreatePost = () => {
 	const [title, setTitle] = React.useState('');
 	const [content, setContent] = React.useState('');
 	const [formError, setFormError] = React.useState(false);
 
-	const handleOnSubmit = (event) => {
+	const handleOnSubmit = async (event) => {
 		event.preventDefault();
 
 		if (!title) {
 			setFormError(true);
 			return;
 		}
+
+		const result = await savePost({ title, content });
+
+		console.log({ result });
 	}
 
 	const handleOnTitleChange = (event) => {
