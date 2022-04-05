@@ -13,6 +13,17 @@ export const CreatePost = () => {
 		}
 	}
 
+	const handleOnTitleChange = (event) => {
+		const { value } = event.target;
+		console.log('changing', value);
+
+		if (value) {
+			setFormError(false);
+		}
+
+		setTitle(value);
+	}
+
 	return (
 		<form className="relative" onSubmit={handleOnSubmit}>
 			<div className="border border-gray-300 mb-5 rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
@@ -25,6 +36,7 @@ export const CreatePost = () => {
 					id="title"
 					className="block w-full border-0 pt-2.5 text-lg font-medium placeholder-gray-500 focus:ring-0"
 					placeholder="Title"
+					onChange={handleOnTitleChange}
 				/>
 				<label htmlFor="content" className="sr-only">
 					Post Content
