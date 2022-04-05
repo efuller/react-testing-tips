@@ -14,7 +14,7 @@ describe('<CreatePost />', () => {
 		expect(alert[0]).toHaveTextContent(/title/i);
 	});
 
-	it.only('should hide error once title has been entered', async () => {
+	it('should hide error once title has been entered', async () => {
 		render(<CreatePost />);
 
 		const button = screen.getByRole('button');
@@ -31,7 +31,21 @@ describe('<CreatePost />', () => {
 		})
 	});
 
-	it.todo('should display the content character count text after entering content');
+	it('should display the content character count text after entering content', async () => {
+		const content = 'This is some very interesting post content.';
+
+		render(<CreatePost />);
+
+		const contentInput = await screen.getByLabelText(/content/i);
+		await userEvent.type(contentInput, content);
+
+		const characterCount = screen.getByTestId('characterCount');
+
+		await waitFor(() => {
+			expect(characterCount).toHaveTextContent(`${content.length} characters`);
+		});
+	});
+
 	it.todo('should call createPost with the correct correct data');
 	it.todo('should disable create button while submitting new post');
 })
