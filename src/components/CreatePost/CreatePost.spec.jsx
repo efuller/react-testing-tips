@@ -49,9 +49,11 @@ describe('<CreatePost />', () => {
 		});
 	});
 
-	it('should call createPost with the correct correct data', async () => {
+	it('should call createPost with the correct correct data and disable button while submitting', async () => {
 		const title = 'This is a blog post title';
 		const content = 'This is some very interesting post content.';
+
+		mockSavePost.mockResolvedValueOnce(true);
 
 		render(<CreatePost />);
 
@@ -64,8 +66,14 @@ describe('<CreatePost />', () => {
 		const button = screen.getByRole('button');
 		fireEvent.submit(button);
 
-		expect(mockSavePost).toHaveBeenCalledWith({ title, content });
-	});
+		await waitFor(() => {
+			expect(button).toBeDisabled();
+		});
 
-	it.todo('should disable create button while submitting new post');
-})
+		expect(mockSavePost).toHaveBeenCalledWith({ title, content });
+
+		await waitFor(() => {
+			expect(button).not.toBeDisabled();
+		});
+	});
+});

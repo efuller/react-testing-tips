@@ -6,6 +6,7 @@ export const CreatePost = () => {
 	const [title, setTitle] = React.useState('');
 	const [content, setContent] = React.useState('');
 	const [formError, setFormError] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
 
 	const handleOnSubmit = async (event) => {
 		event.preventDefault();
@@ -15,7 +16,11 @@ export const CreatePost = () => {
 			return;
 		}
 
+		setLoading(true);
+
 		const result = await savePost({ title, content });
+
+		setLoading(false);
 
 		console.log({ result });
 	}
@@ -82,6 +87,7 @@ export const CreatePost = () => {
 						<button
 							type="submit"
 							className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+							disabled={loading}
 						>
 							Create
 						</button>
