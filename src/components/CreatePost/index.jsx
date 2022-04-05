@@ -10,9 +10,13 @@ export const CreatePost = () => {
 	const [loading, setLoading] = React.useState(false);
 	const [posts, setPosts] = React.useState([]);
 
+	/**
+	 * Handle submitting the form.
+	 */
 	const handleOnSubmit = async (event) => {
 		event.preventDefault();
 
+		// Set a form error if there is no title and bail.
 		if (!title) {
 			setFormError(true);
 			return;
@@ -20,10 +24,12 @@ export const CreatePost = () => {
 
 		setLoading(true);
 
+		// 'Save' our post to JSON Placeholder
 		const result = await savePost({ title, content });
 
 		setLoading(false);
 
+		// Update the post list.
 		setPosts((prevState) => {
 			return [
 				...prevState,
@@ -34,25 +40,35 @@ export const CreatePost = () => {
 			]
 		});
 
+		// Reset the form inputs.
 		setTitle('');
 		setContent('');
-
-		console.log({ result });
 	}
 
+	/**
+	 * Handle the title changing.
+	 */
 	const handleOnTitleChange = (event) => {
+		// Grab the input value.
 		const { value } = event.target;
 
+		// Remove the error if there is a value for the title.
 		if (value) {
 			setFormError(false);
 		}
 
+		// Set the title.
 		setTitle(value);
 	}
 
+	/**
+	 * Handle content changing.
+	 */
 	const handleOnContentChange = (event) => {
+		// Grab the input value.
 		const { value } = event.target;
 
+		// Set the content.
 		setContent(value);
 	}
 
