@@ -1,4 +1,4 @@
-import { CreatePost } from './Components';
+import { CreatePost } from './components';
 
 function App() {
   return (
