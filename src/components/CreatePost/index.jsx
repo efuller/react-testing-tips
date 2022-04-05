@@ -6,9 +6,9 @@ import { PostList } from '../PostList';
 export const CreatePost = () => {
 	const [title, setTitle] = React.useState('');
 	const [content, setContent] = React.useState('');
+	const [posts, setPosts] = React.useState([]);
 	const [formError, setFormError] = React.useState(false);
 	const [loading, setLoading] = React.useState(false);
-	const [posts, setPosts] = React.useState([]);
 
 	/**
 	 * Handle submitting the form.
@@ -17,48 +17,27 @@ export const CreatePost = () => {
 		event.preventDefault();
 
 		// Set a form error if there is no title and bail.
-		if (!title) {
-			setFormError(true);
-			return;
-		}
 
-		setLoading(true);
+		// Set the loading state.
 
-		// 'Save' our post to JSON Placeholder
-		const result = await savePost({ title, content });
+		// 'Save' our post to JSON Placeholder using savePost.
 
-		setLoading(false);
+		// Remove loading state.
 
 		// Update the post list.
-		setPosts((prevState) => {
-			return [
-				...prevState,
-				{
-					title,
-					content,
-				}
-			]
-		});
 
 		// Reset the form inputs.
-		setTitle('');
-		setContent('');
-	}
+	};
 
 	/**
 	 * Handle the title changing.
 	 */
 	const handleOnTitleChange = (event) => {
 		// Grab the input value.
-		const { value } = event.target;
 
 		// Remove the error if there is a value for the title.
-		if (value) {
-			setFormError(false);
-		}
 
 		// Set the title.
-		setTitle(value);
 	}
 
 	/**
@@ -66,10 +45,8 @@ export const CreatePost = () => {
 	 */
 	const handleOnContentChange = (event) => {
 		// Grab the input value.
-		const { value } = event.target;
 
 		// Set the content.
-		setContent(value);
 	}
 
 	return (
@@ -126,11 +103,7 @@ export const CreatePost = () => {
 						</div>
 					</div>
 				</div>
-				{
-					formError ? (
-						<div role="alert" className="text-red-700">* Please enter a post title.</div>
-					) : null
-				}
+				<div role="alert" className="text-red-700">* Please enter a post title.</div>
 			</form>
 			<PostList posts={posts} />
 		</>
