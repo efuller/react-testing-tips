@@ -6,7 +6,9 @@ export const CreatePost = () => {
 	const [content, setContent] = React.useState('');
 	const [formError, setFormError] = React.useState(false);
 
-	const handleOnSubmit = () => {
+	const handleOnSubmit = (event) => {
+		event.preventDefault();
+
 		if (!title) {
 			setFormError(true);
 			return;
@@ -15,13 +17,18 @@ export const CreatePost = () => {
 
 	const handleOnTitleChange = (event) => {
 		const { value } = event.target;
-		console.log('changing', value);
 
 		if (value) {
 			setFormError(false);
 		}
 
 		setTitle(value);
+	}
+
+	const handleOnContentChange = (event) => {
+		const { value } = event.target;
+
+		setContent(value);
 	}
 
 	return (
@@ -37,6 +44,7 @@ export const CreatePost = () => {
 					className="block w-full border-0 pt-2.5 text-lg font-medium placeholder-gray-500 focus:ring-0"
 					placeholder="Title"
 					onChange={handleOnTitleChange}
+					value={title}
 				/>
 				<label htmlFor="content" className="sr-only">
 					Post Content
@@ -47,7 +55,8 @@ export const CreatePost = () => {
 					id="content"
 					className="block w-full border-0 py-0 resize-none placeholder-gray-500 focus:ring-0 sm:text-sm"
 					placeholder="Write post content here..."
-					defaultValue={''}
+					value={content}
+					onChange={handleOnContentChange}
 				/>
 
 				{/* Spacer element to match the height of the toolbar */}
@@ -63,7 +72,7 @@ export const CreatePost = () => {
 					</div>
 				</div>
 				<div className="border-t border-gray-200 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
-					<CharCounter />
+					<CharCounter characterCount={content.length} />
 					<div className="flex-shrink-0">
 						<button
 							type="submit"
