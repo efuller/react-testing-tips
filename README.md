@@ -31,7 +31,7 @@ the test to not work properly.
 
 Below are a collection of tips that you may find helpful at some point!
 
-## Be Aware of Query Return Types
+## Know RTL Query Return Types
 - https://testing-library.com/docs/react-testing-library/cheatsheet#queries
 
 If you want to test if a query result is `null`, then you will want to use a `queryBy` query.
@@ -83,9 +83,8 @@ jest.mock('./MyComponent', () => ({
 // useMyHook.js
 
 export const useMyHook = () => {
-	const update = () => {
-		// Perform some updating logic.
-  };
+	// Perform some updating logic.
+	const update = () => {};
 	
 	return { update };
 };
@@ -163,7 +162,8 @@ describe('<MyComponent />', () => {
 		jest.clearAllMocks();
 		// or
     jest.resetAllMocks();
-  })
+  });
+
 	it('this is the first test', () => {});
 });
 ```
