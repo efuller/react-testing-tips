@@ -21,6 +21,7 @@ It is just as important to be able to make a test fail as it is to make it pass.
 - `RTL Cheatsheet`: https://testing-library.com/docs/react-testing-library/cheatsheet
 - `Jest-Dom Matchers`: https://github.com/testing-library/jest-dom#table-of-contents
 - `Common Mistakes with RTL`: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+- `Jest Mocks`: https://jestjs.io/docs/mock-function-api
 - `All Things Written by Kent` https://kentcdodds.com
 
 ## Jest / RTL Tips
