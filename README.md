@@ -149,3 +149,70 @@ jest.mock('./useMyHook', () => ({
 // This will allow you to verify the update function has been called.
 expect(mockUpdate).toHaveBeenCalled();
 ```
+## Don't Forget About jest.clearAllMocks() or jest.resetAllMocks()
+
+In most cases, if you are using mocks in your tests, you will want to either call
+[jest.clearAllMocks()](https://jestjs.io/docs/jest-object#jestclearallmocks) or
+[jest.resetAllMocks()](https://jestjs.io/docs/jest-object#jestresetallmocks) in the `beforeEach()` hook.
+Otherwise, things might not work as expected in the test.
+
+```js
+describe('<MyComponent />', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		// or
+    jest.resetAllMocks();
+  })
+	it('this is the first test', () => {});
+});
+```
+## Mock Different Implementation For Each Test
+
+## Using a `setTimeout()` In Your Code?
+
+`Timer Mocks`: https://jestjs.io/docs/timer-mocks
+
+`jest.useFaketimers()`: https://jestjs.io/docs/jest-object#jestusefaketimersimplementation-modern--legacy
+
+`jest.runAllTimers()`: https://jestjs.io/docs/jest-object#jestrunalltimers
+
+Sometimes `setTimeout()` needs to be used inside of code. One example might be hiding or showing
+a component on load for a specific amount of time. This code could look something like this:
+
+```js
+export const MyFormComponent = () => {
+	const [show, setShow] = React.useState(false);
+	
+	// Show the form after two seconds on load.
+	React.useEffect(() => {
+		let showTimeout;
+
+		const setShowTimeout = () => {
+			showTimeout = setTimeout(() => {
+				setShow(true);
+			}, 2000);
+		};
+
+		setShowTimeout();
+
+		return () => clearTimeout(showTimeout);
+	}, []);
+
+	show ? ( <form data-testid="my-form"></form> ) : null;
+}
+```
+
+A resulting test might look something like this:
+
+```js
+it('should render form after 2 seconds', async () => {
+	jest.useFakeTimers();
+	render(<MyFormComponent />);
+
+	await waitFor(() => {
+		expect(screen.getByTestId('my-form')).toBeInTheDocument();
+	});
+
+	jest.runAllTimers();
+});
+```
