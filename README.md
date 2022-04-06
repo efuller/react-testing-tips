@@ -35,25 +35,25 @@ Below are a collection of tips that you may find helpful at some point!
 
 If you want to test if a query result is `null`, then you will want to use a `queryBy` query.
 
-If you want to be able to `await` a query in line, then a `findBy` query would be in order.
+If you want to be able to `await` a query in-line, then a `findBy` query would be in order.
 
 ## Use `screen.debug()` and `console.log` frequently
 
 `screen.debug()` is a very useful RTL tool that will output the markup of a component within a test.
 
-```jsx
-	it('this is a test', () => {
-		render(<Component />);
-		
-		// Get a button.
-		const button = screen.getByRole('button');
-	  
-		// Will display the button markup if found.
-		screen.debug(button);
-		
-		// Will display the markup of the whole component.
-    screen.debug(); 
-	});
+```js
+it('this is a test', () => {
+  render(<Component />);
+  
+  // Get a button.
+  const button = screen.getByRole('button');
+  
+  // Will display the button markup if found.
+  screen.debug(button);
+  
+  // Will display the markup of the whole component.
+  screen.debug(); 
+});
 ```
 `console.log()` can be very useful when added to the actual component you are testing. For example,
 let's say you are testing a form submission, and you want to verify that your test is triggering the
@@ -62,13 +62,13 @@ actually being submitted in the test.
 
 ## Mock a Component
 
-```jsx
+```js
 // MyComponent.jsx
 
 export const MyComponent = () => (<h1>This is a component</>);
 ```
 
-```jsx
+```js
 // MyComponent.spec.jsx
 
 jest.mock('./MyComponent', () => ({
@@ -78,7 +78,7 @@ jest.mock('./MyComponent', () => ({
 
 ## Mock a Hook
 
-```jsx
+```js
 // useMyHook.js
 
 export const useMyHook = () => {
@@ -92,7 +92,7 @@ export const useMyHook = () => {
 };
 ```
 
-```jsx
+```js
 // A component test file that uses the hook.
 
 // Create a mock for the update function.
@@ -110,7 +110,7 @@ expect(mockUpdate).toHaveBeenCalled();
 
 ## Mocking Just One Function of a Hook
 
-```jsx
+```js
 // useMyEnhancedHook.js
 
 export const useMyHook = () => {
@@ -134,7 +134,7 @@ export const useMyHook = () => {
 };
 ```
 
-```jsx
+```js
 // A component test file that uses the enhanced hook.
 
 // Create a mock for the update function.
