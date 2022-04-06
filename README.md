@@ -166,7 +166,6 @@ describe('<MyComponent />', () => {
 	it('this is the first test', () => {});
 });
 ```
-## Mock Different Implementation For Each Test
 
 ## Using a `setTimeout()` In Your Code?
 
