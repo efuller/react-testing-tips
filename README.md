@@ -5,7 +5,7 @@ and [React Testing Library](https://testing-library.com/docs/react-testing-libra
 
 ---
 ## Why Test?
-- Because it is fun! But it can also very hard and also very frustrating at times..
+- Although testing is hard and can be very frustrating at times, it can be a lot of fun!
 - Testing helps promote thinking about how a component is going to work before implementation.
 - It helps provides confidence for changes that will inevitably need to be made in the future.
 
@@ -14,30 +14,30 @@ and [React Testing Library](https://testing-library.com/docs/react-testing-libra
 - There is something very gratifying about using TDD to create a component's functionality without
 ever viewing it in the browser.
 
-## Always Make Sure a Test Will Fail
-- It's just as important to be able to make a test fail as it is to make it pass.
+## Tests Should Always Fail
+It is just as important to be able to make a test fail as it is to make it pass.
 
 ## Helpful Resources
 - `RTL Cheatsheet`: https://testing-library.com/docs/react-testing-library/cheatsheet
 - `Jest-Dom Matchers`: https://github.com/testing-library/jest-dom#table-of-contents
 - `Common Mistakes with RTL`: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
-- `Anything on kentcdodds.com` https://kentcdodds.com
+- `All Things Written by Kent` https://kentcdodds.com
 
 ## Jest / RTL Tips
-There is no doubt that I have spent hours trying to figure out how to do a thing when it comes to testing.
-In most cases, it is usually due to trying to figure out a way to mock a resource or or because
-there is some weird async thing happening in a component.
+I have spent hours trying to figure out how to do things when it comes to testing. In most cases,
+it usually involves mocking or there is a weird async thing happening in a component that is causing
+the test to not work properly.
 
 Below are a collection of tips that you may find helpful at some point!
 
-### Be Aware of Query Return Types
+## Be Aware of Query Return Types
 - https://testing-library.com/docs/react-testing-library/cheatsheet#queries
 
 If you want to test if a query result is `null`, then you will want to use a `queryBy` query.
 
 If you want to be able to `await` a query in line, then a `findBy` query would be in order.
 
-### Use `screen.debug()` and `console.log` frequently
+## Use `screen.debug()` and `console.log` frequently
 
 `screen.debug()` is a very useful RTL tool that will output the markup of a component within a test.
 
@@ -60,7 +60,7 @@ let's say you are testing a form submission, and you want to verify that your te
 `onSubmit` handler. Adding in a `console.log()` to the handler can help you verify that the form is
 actually being submitted in the test.
 
-### Mock a Component
+## Mock a Component
 
 ```jsx
 // MyComponent.jsx
@@ -76,7 +76,7 @@ jest.mock('./MyComponent', () => ({
 }));
 ```
 
-### Mock a Hook
+## Mock a Hook
 
 ```jsx
 // useMyHook.js
@@ -108,7 +108,7 @@ jest.mock('./useMyHook', () => ({
 expect(mockUpdate).toHaveBeenCalled();
 ```
 
-### Mocking Just One Function of a Hook
+## Mocking Just One Function of a Hook
 
 ```jsx
 // useMyEnhancedHook.js
