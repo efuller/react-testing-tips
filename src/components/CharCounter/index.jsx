@@ -1,3 +1,10 @@
+/**
+ * This component will require some changes.
+ *
+ * - it should take a characterCount prop
+ * - if there is no character count passed in, it should show some default text
+ * - if there is a character count prop passed in, then display text using the count
+ */
 export const CharCounter = () => (
 	<div className="flex">
 		<div
