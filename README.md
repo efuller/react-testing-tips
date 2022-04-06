@@ -1,70 +1,218 @@
-# Getting Started with Create React App
+# React Testing Tips
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Helpful tips and resources for testing React components using [Jest](https://jestjs.io/)
+and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-## Available Scripts
+---
+## Why Test?
+- Although testing is hard and can be very frustrating at times, it can be a lot of fun!
+- Testing helps promote thinking about how a component is going to work before implementation.
+- It helps provides confidence for changes that will inevitably need to be made in the future.
 
-In the project directory, you can run:
+## What About TDD?
+- Use it where you can! It's not practical in every situation.
+- There is something very gratifying about using TDD to create a component's functionality without
+ever viewing it in the browser.
 
-### `npm start`
+## Tests Should Always Fail
+It is just as important to be able to make a test fail as it is to make it pass.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Helpful Resources
+- `RTL Cheatsheet`: https://testing-library.com/docs/react-testing-library/cheatsheet
+- `Jest-Dom Matchers`: https://github.com/testing-library/jest-dom#table-of-contents
+- `Common Mistakes with RTL`: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+- `Jest Mocks`: https://jestjs.io/docs/mock-function-api
+- `All Things Written by Kent` https://kentcdodds.com
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Jest / RTL Tips
+I have spent hours trying to figure out how to do things when it comes to testing. In most cases,
+it usually involves mocking or there is a weird async thing happening in a component that is causing
+the test to not work properly.
 
-### `npm test`
+Below are a collection of tips that you may find helpful at some point!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Know RTL Query Return Types
+- https://testing-library.com/docs/react-testing-library/cheatsheet#queries
 
-### `npm run build`
+If you want to test if a query result is `null`, then you will want to use a `queryBy` query.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If you want to be able to `await` a query in-line, then a `findBy` query would be in order.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Use `screen.debug()` and `console.log` frequently
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`screen.debug()` is a very useful RTL tool that will output the markup of a component within a test.
 
-### `npm run eject`
+```js
+it('this is a test', () => {
+  render(<Component />);
+  
+  // Get a button.
+  const button = screen.getByRole('button');
+  
+  // Will display the button markup if found.
+  screen.debug(button);
+  
+  // Will display the markup of the whole component.
+  screen.debug(); 
+});
+```
+`console.log()` can be very useful when added to the actual component you are testing. For example,
+let's say you are testing a form submission, and you want to verify that your test is triggering the
+`onSubmit` handler. Adding in a `console.log()` to the handler can help you verify that the form is
+actually being submitted in the test.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Mock a Component
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+// MyComponent.jsx
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+export const MyComponent = () => (<h1>This is a component</>);
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```js
+// MyComponent.spec.jsx
 
-## Learn More
+jest.mock('./MyComponent', () => ({
+	MyComponent: () => (<div data-testid="myComponent">Test Component</div>),
+}));
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Mock a Hook
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```js
+// useMyHook.js
 
-### Code Splitting
+export const useMyHook = () => {
+	// Perform some updating logic.
+	const update = () => {};
+	
+	return { update };
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```js
+// A component test file that uses the hook.
 
-### Analyzing the Bundle Size
+// Create a mock for the update function.
+const mockUpdate = jest.fn();
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+jest.mock('./useMyHook', () => ({
+  useMyHook: () => ({
+    update: mockUpdate,
+  }),
+}));
 
-### Making a Progressive Web App
+// This will allow you to verify the update function has been called.
+expect(mockUpdate).toHaveBeenCalled();
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Mocking Just One Function of a Hook
 
-### Advanced Configuration
+See: https://jestjs.io/docs/jest-object#jestrequireactualmodulename
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```js
+// useMyEnhancedHook.js
 
-### Deployment
+export const useMyHook = () => {
+	// Perform read logic here.
+	const read = () => {};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+	// Perform creation logic here.
+	const create = () => {};
 
-### `npm run build` fails to minify
+	// Perform some updating logic.
+	const update = () => {};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+	return {
+		create,
+		read,
+		update
+	};
+};
+```
+
+```js
+// A component test file that uses the enhanced hook.
+
+// Create a mock for the update function.
+const mockUpdate = jest.fn();
+
+jest.mock('./useMyHook', () => ({
+	useMyHook: () => ({
+    // Use the actual create and read implementations.
+    ...jest.requireActual('./useMyEnhancedHook').useMyEnhancedHook(),
+    // Mock just the update function.
+		update: mockUpdate,
+	}),
+}));
+
+// This will allow you to verify the update function has been called.
+expect(mockUpdate).toHaveBeenCalled();
+```
+## Don't Forget About jest.clearAllMocks() or jest.resetAllMocks()
+
+In most cases, if you are using mocks in your tests, you will want to either call
+[jest.clearAllMocks()](https://jestjs.io/docs/jest-object#jestclearallmocks) or
+[jest.resetAllMocks()](https://jestjs.io/docs/jest-object#jestresetallmocks) in the `beforeEach()` hook.
+Otherwise, things might not work as expected in the test.
+
+```js
+describe('<MyComponent />', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		// or
+    jest.resetAllMocks();
+  });
+
+	it('this is the first test', () => {});
+});
+```
+
+## Using a `setTimeout()` In Your Code?
+
+`Timer Mocks`: https://jestjs.io/docs/timer-mocks
+
+`jest.useFaketimers()`: https://jestjs.io/docs/jest-object#jestusefaketimersimplementation-modern--legacy
+
+`jest.runAllTimers()`: https://jestjs.io/docs/jest-object#jestrunalltimers
+
+Sometimes `setTimeout()` needs to be used inside of code. One example might be hiding or showing
+a component on load for a specific amount of time. This code could look something like this:
+
+```js
+export const MyFormComponent = () => {
+	const [show, setShow] = React.useState(false);
+	
+	// Show the form after two seconds on load.
+	React.useEffect(() => {
+		let showTimeout;
+
+		const setShowTimeout = () => {
+			showTimeout = setTimeout(() => {
+				setShow(true);
+			}, 2000);
+		};
+
+		setShowTimeout();
+
+		return () => clearTimeout(showTimeout);
+	}, []);
+
+	show ? ( <form data-testid="my-form"></form> ) : null;
+}
+```
+
+A resulting test might look something like this:
+
+```js
+it('should render form after 2 seconds', async () => {
+	jest.useFakeTimers();
+	render(<MyFormComponent />);
+
+	await waitFor(() => {
+		expect(screen.getByTestId('my-form')).toBeInTheDocument();
+	});
+
+	jest.runAllTimers();
+});
+```
