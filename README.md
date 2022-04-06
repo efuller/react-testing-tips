@@ -86,9 +86,7 @@ export const useMyHook = () => {
 		// Perform some updating logic.
   };
 	
-	return {
-		update
-  };
+	return { update };
 };
 ```
 
@@ -110,21 +108,20 @@ expect(mockUpdate).toHaveBeenCalled();
 
 ## Mocking Just One Function of a Hook
 
+See: https://jestjs.io/docs/jest-object#jestrequireactualmodulename
+
 ```js
 // useMyEnhancedHook.js
 
 export const useMyHook = () => {
-	const read = () => {
-		// Perform read logic here.
-  };
-	
-	const create = () => {
-		// Perform creation logic here.
-  };
+	// Perform read logic here.
+	const read = () => {};
 
-	const update = () => {
-		// Perform some updating logic.
-	};
+	// Perform creation logic here.
+	const create = () => {};
+
+	// Perform some updating logic.
+	const update = () => {};
 
 	return {
 		create,
